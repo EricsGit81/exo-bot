@@ -9,7 +9,8 @@ import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.daily import DailyTrigger
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 BOT_TOKEN = "7753497642:AAEX3s9PTv_9oR24-Bz5K87l6FiPwVK0ALo"
 CHAT_ID = "6732832197" 
@@ -36,11 +37,15 @@ app.post_init = startup
 print("🚀 Exo is online.")
 
 # === SCHEDULER ===
-scheduler = AsyncIOScheduler()
-scheduler.add_job(
-    lambda: app.bot.send_message(chat_id=CHAT_ID, text=generate_forecast()),
-    trigger=DailyTrigger(hour=12),  # adjust hour if you want it earlier/later UTC
-)
-scheduler.start()
+def start_scheduler():
+    scheduler = BackgroundScheduler()
+    # Runs daily at 09:00 UTC — change as needed
+    scheduler.add_job(lambda: app.bot.send_message(chat_id=CHAT_ID, text=generate_forecast()),
+                      CronTrigger(hour=9, minute=0))
+    scheduler.start()
+
+
+start_scheduler()
+
 
 app.run_polling()
