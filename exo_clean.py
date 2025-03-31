@@ -50,7 +50,7 @@ start_scheduler()
 
 # Replace polling with webhook setup
 async def main():
-    await app.bot.set_webhook(url="https://<https://exo-bot.onrender.com>.onrender.com")  # 👈 update this URL
+    await app.bot.set_webhook(url="https://<https://exo-bot>.onrender.com")  # 👈 update this URL
     await app.initialize()
     await app.start()
     print("🚀 Exo is online with webhook.")
