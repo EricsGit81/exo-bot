@@ -48,4 +48,13 @@ def start_scheduler():
 start_scheduler()
 
 
-app.run_polling()
+# Replace polling with webhook setup
+async def main():
+    await app.bot.set_webhook(url="https://<https://exo-bot.onrender.com>.onrender.com")  # 👈 update this URL
+    await app.initialize()
+    await app.start()
+    print("🚀 Exo is online with webhook.")
+    await app.updater.start_polling()  # not required but can be used for debugging
+
+import asyncio
+asyncio.run(main())
